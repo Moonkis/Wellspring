@@ -1,5 +1,4 @@
 #include "SplashState.hpp"
-#include <iostream>
 
 SplashState::SplashState(float fadetime, float timeBeforeFade, std::string background, vh::Context& context)
 : State()
@@ -34,10 +33,8 @@ void SplashState::update(float dt, float time, vh::Context& context)
 		m_timeBeforeFade = 0;
 		float alpha = m_color.a - ( 255 / m_fadetime ) * dt;
 		if( alpha < 0 ) alpha = 0;
-		std::cout << alpha << std::endl;
 		if( alpha == 0 )
 		{
-			std::cout << "SPLASH DONE" << std::endl;
 			m_finished = true;
 			m_remove = true;
 			return;

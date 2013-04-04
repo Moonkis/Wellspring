@@ -1,8 +1,8 @@
 #ifndef _WELLSPRING_WELLSPRING_HPP
 #define _WELLSPRING_WELLSPRING_HPP
-#include <VILDHJARTA\Game.hpp>
-#include <VILDHJARTA\ResourceCache.hpp>
-#include "State.hpp"
+#include <Vildhjarta\Game.hpp>
+#include <Vildhjarta\ResourceCache.hpp>
+#include <Vildhjarta\State.hpp>
 #include <stack>
 #include <SFML\Audio.hpp>
 
@@ -19,8 +19,8 @@ private:
 	
 	vh::ResourceCache<sf::Texture> m_textures;
 	vh::ResourceCache<sf::SoundBuffer> m_soundbuffers;
-	
-	std::stack<State*> m_states;
+
+	std::stack<vh::State*> m_states;
 };
 
 #endif
