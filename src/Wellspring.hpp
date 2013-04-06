@@ -1,8 +1,10 @@
 #ifndef _WELLSPRING_WELLSPRING_HPP
 #define _WELLSPRING_WELLSPRING_HPP
 #include <Vildhjarta\Game.hpp>
-#include <Vildhjarta\ResourceCache.hpp>
 #include <Vildhjarta\State.hpp>
+#include <Vildhjarta\Graphics.hpp>
+#include <Vildhjarta\Audio.hpp>
+
 #include <stack>
 #include <SFML\Audio.hpp>
 
@@ -17,9 +19,10 @@ private:
 	void update(float dt, float time, vh::Context& context);
 	void render(sf::RenderWindow& window);
 	
-	vh::ResourceCache<sf::Texture> m_textures;
-	vh::ResourceCache<sf::SoundBuffer> m_soundbuffers;
-
+	/* Audio, Graphics and Statemanagment is to be integrated into Vildhjarta. */
+	vh::Audio m_audio;
+	vh::Graphics m_graphics;
+	
 	std::stack<vh::State*> m_states;
 };
 

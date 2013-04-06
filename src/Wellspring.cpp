@@ -3,15 +3,15 @@
 #include <Vildhjarta\Audio.hpp>
 #include <Vildhjarta\Graphics.hpp>
 #include "SplashState.hpp"
-
+#include "Level.hpp"
 bool Wellspring::initialize()
 {
 	// Create a new SFML window
 	m_wind.create(sf::VideoMode(600,400,32), "@Wellspring", sf::Style::Titlebar);
 	
-	// Create Audio and Graphics Handlers
-	m_context.audio = new vh::Audio();
-	m_context.graphics = new vh::Graphics();
+	/* Is due to be moved into the Vildhjarta 'GameWindow' class. */
+	m_context.audio = &m_audio;
+	m_context.graphics = &m_graphics;
 	
 	// Create and Add SplashStates
 	m_states.push( new SplashState(3,5,"victorsplash.png", m_context) );
@@ -84,9 +84,6 @@ void Wellspring::render(sf::RenderWindow& window)
 }
 Wellspring::~Wellspring()
 {
-	delete m_context.audio;
-	delete m_context.graphics;
-	
 	while( !m_states.empty() )
 	{
 		delete m_states.top();
