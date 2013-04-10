@@ -4,6 +4,10 @@
 #include <Vildhjarta\Graphics.hpp>
 #include "SplashState.hpp"
 #include "Level.hpp"
+
+#include <stdlib.h>
+#include <time.h>
+
 bool Wellspring::initialize()
 {
 	// Create a new SFML window
@@ -16,6 +20,11 @@ bool Wellspring::initialize()
 	// Create and Add SplashStates
 	m_states.push( new SplashState(3,5,"victorsplash.png", m_context) );
 	m_states.push( new SplashState(3,5,"ogamsplash.png", m_context) );
+	
+	srand(time(0));
+	
+	Level level(50,50);
+	level.generate();
 	
 	return true;
 }
