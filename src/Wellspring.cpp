@@ -3,28 +3,39 @@
 #include <Vildhjarta\Audio.hpp>
 #include <Vildhjarta\Graphics.hpp>
 #include "SplashState.hpp"
-#include "Level.hpp"
+#include "GameState.hpp"
 
 #include <stdlib.h>
 #include <time.h>
+
+#include "EntityFactory.hpp"
+#include "Player.hpp"
+#include "Door.hpp"
+#include "Stairway.hpp"
 
 bool Wellspring::initialize()
 {
 	// Create a new SFML window
 	m_wind.create(sf::VideoMode(600,400,32), "@Wellspring", sf::Style::Titlebar);
+	m_wind.setVerticalSyncEnabled(true);
 	
 	/* Is due to be moved into the Vildhjarta 'GameWindow' class. */
 	m_context.audio = &m_audio;
 	m_context.graphics = &m_graphics;
 	
-	// Create and Add SplashStates
-	m_states.push( new SplashState(3,5,"victorsplash.png", m_context) );
-	m_states.push( new SplashState(3,5,"ogamsplash.png", m_context) );
+	// Register Context and Entities in the factory.
+	EntityFactory::get()->registerContext(&m_context);
+	EntityFactory::get()->registerEntity("player", &Player::createPlayer);
+	EntityFactory::get()->registerEntity("door", &Door::createDoor);
+	EntityFactory::get()->registerEntity("stairway", &Stairway::createStairway);
 	
+	// Seed the rand() function.
 	srand(time(0));
 	
-	Level level(50,50);
-	level.generate();
+	// Create and Add SplashStates
+	m_states.push( new GameState(m_context, &m_wind) );
+	m_states.push( new SplashState(3,5,"victorsplash.png", m_context) );
+	m_states.push( new SplashState(3,5,"ogamsplash.png", m_context) );
 	
 	return true;
 }
@@ -59,6 +70,7 @@ void Wellspring::handleEvent(sf::Event& event, sf::RenderWindow& window)
 
 void Wellspring::update(float dt, float time, vh::Context& context)
 {
+	EntityFactory::get()->performGarbageCollect();
 	if( !m_states.empty() )
 	{
 		vh::State* state = m_states.top();
@@ -89,6 +101,7 @@ void Wellspring::render(sf::RenderWindow& window)
 		vh::State* state = m_states.top();
 		state->render(window);
 	}
+		
 	window.display();
 }
 Wellspring::~Wellspring()
@@ -98,4 +111,5 @@ Wellspring::~Wellspring()
 		delete m_states.top();
 		m_states.pop();
 	}
+	EntityFactory::get()->performGarbageCollect();
 }

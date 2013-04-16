@@ -1,17 +1,15 @@
 #include "Room.hpp"
 #include <Vildhjarta\Random.hpp>
 #include <iostream>
-
+#include "Level.hpp"
 #include <stdlib.h>
 
-Room::Room(unsigned int x, unsigned int y, unsigned int width, unsigned int height, unsigned int doorBX, unsigned int doorBY, Room* connectedRoom)
+Room::Room(unsigned int x, unsigned int y, unsigned int width, unsigned int height, Room* connectedRoom)
 {
 	m_x = x;
 	m_y = y;
 	m_width = width;
 	m_height = height;
-	m_doorBX = doorBX;
-	m_doorBY = doorBY;
 	
 	
 	/* Add directions. */
@@ -56,23 +54,35 @@ void Room::removeDirection(Direction direction)
 	}
 }
 
+int walltype()
+{
+	int id = 2;
+	int chance = 1 + rand() % 100;
+	if( chance <= 15 )
+	{
+		id = 3;
+	}
+		
+	return id;
+}
+
 void Room::fill(Tiles& tiles)
 {
 	/* Make room */
-	for(int y = m_y; y < m_y+m_height; y++ )
+	for(unsigned int y = m_y; y < m_y+m_height; y++ )
 	{
-		for( int x = m_x; x < m_x+m_width; x++ )
+		for( unsigned int x = m_x; x < m_x+m_width; x++ )
 		{
 			/* Floor */
 			tiles[x][y] = 1;
 			
 			/* Top and Bottom Wall */
-			tiles[x][m_y] = 2;
-			tiles[x][m_y+m_height-1] = 2;
-			
+			tiles[x][m_y] = walltype();
+			tiles[x][m_y+m_height-1] = walltype();
+
 			/* Left and Right Wall */
-			tiles[m_x][y] = 2;
-			tiles[m_x+m_width-1][y] = 2;
+			tiles[m_x][y] = walltype();
+			tiles[m_x+m_width-1][y] = walltype();
 		}
 	}
 }
@@ -84,21 +94,32 @@ void Room::remove(Tiles& tiles)
 
 bool Room::validPlacement(Tiles& tiles,  unsigned int width, unsigned int height)
 {
-	for(int y = m_y; y < m_y+m_height; y++ )
+	for(unsigned int y = m_y; y < m_y+m_height; y++ )
 	{
-		for( int x = m_x; x < m_x+m_width; x++ )
+		for( unsigned int x = m_x; x < m_x+m_width; x++ )
 		{
 			/* Floor */
-			if( x < 0 || x >= width )
+			if( x < 0 || x >= width-1 )
 				return false;
-			if( y < 0 || y > height )
+			if( y < 0 || y > height-1 )
 				return false;
 			
-			if( tiles[x][y] > 0 )
+			if( tiles[x][y] > 0 && tiles[x][y] < 2 )
 				return false;
 		}
 	}
 	return true;
+}
+
+void Room::showRoom(FogMap& fogmap)
+{
+	for( unsigned int y = m_y; y < m_y+m_height; y++ )
+	{
+		for( unsigned int x = m_x; x < m_x+m_width; x++ )
+		{
+			fogmap[x][y] = false;
+		}
+	}
 }
 	
 unsigned int Room::getX()

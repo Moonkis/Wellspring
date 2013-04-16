@@ -1,5 +1,6 @@
 #ifndef _WELLSPRING_WELLSPRING_HPP
 #define _WELLSPRING_WELLSPRING_HPP
+
 #include <Vildhjarta\Game.hpp>
 #include <Vildhjarta\State.hpp>
 #include <Vildhjarta\Graphics.hpp>
@@ -22,7 +23,6 @@ private:
 	/* Audio, Graphics and Statemanagment is to be integrated into Vildhjarta. */
 	vh::Audio m_audio;
 	vh::Graphics m_graphics;
-	
 	std::stack<vh::State*> m_states;
 };
 

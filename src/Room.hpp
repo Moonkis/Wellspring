@@ -4,8 +4,9 @@
 #include <vector>
 
 typedef std::vector< std::vector<unsigned int> > Tiles;
+typedef std::vector< std::vector<bool> > FogMap;
 
-typedef enum Direction
+enum Direction
 {
 	UPP,
 	DOWN,
@@ -13,11 +14,10 @@ typedef enum Direction
 	RIGHT
 };
 
-
 class Room
 {
 public:
-	Room(unsigned int x, unsigned int y, unsigned int m_width, unsigned int m_height, unsigned int doorBX, unsigned int doorBY, Room* connectedRoom);
+	Room(unsigned int x, unsigned int y, unsigned int m_width, unsigned int m_height, Room* connectedRoom);
 	void fill(Tiles& tiles);
 	void remove(Tiles& tiles);
 	bool validPlacement(Tiles& tiles, unsigned int width, unsigned int height);
@@ -34,6 +34,8 @@ public:
 	
 	void removeDirection(Direction direction);
 	Room* getConnected() { return m_connectedRoom; }
+	
+	void showRoom(FogMap& fogmap);
 private:
 	unsigned int m_x, m_y;
 	unsigned int m_doorAX, m_doorAY, m_doorBX, m_doorBY;
